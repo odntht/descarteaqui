@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Projeto Descarte-Aqui da UnB">
+  <meta name="author" content="">
+
+  <title>Projeto Descarte Aqui</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+    crossorigin="anonymous"></script>
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
+  <script src="mapa.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Descarte Aqui</h1>
+    <p>Descrição do aplicativo</p>
+    <div class="d-flex flex-row">
+      <div class="p-4">
+
+        <h3>Lista de Produto</h3>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Digite o nome do produto" title="Filtro de produto">
+        <br />
+        <table class="table" style="width: 500px; ">
+          <thead>
+            <tr>
+              <th style="width:60%;">Produto</th>
+              <th style="width:40%;">Material</th>
+            </tr>
+          </thead>
+          <tr>
+            <td>Livro</td>
+            <td>Papel</td>
+          </tr>
+          <tr>
+            <td>Garrafa Pet</td>
+            <td>Plástico</td>
+          </tr>
+          <tr>
+            <td>Lata de Bebida</td>
+            <td>Metal</td>
+          </tr>
+        </table>
+      </div>
+      <div class="p-4">
+        <h3>Localização no google Maps</h3>
+        <div id="mapa" style="height: 500px; width: 700px"></div>
+        <script>
+          google.maps.event.addDomListener(window, 'load', carrega_google_maps(-15.792872, -47.899374, 'mapa', 12, 'ROADMAP'));
+        </script>
+      </div>
+    </div>
+    <script>
+      function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td) {
+            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+
+       plotaInformation("001", "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF9900", -15.792872, -47.899374, "<div class='panel-heading panel-info'><h4><b>Informações de um Lugar</b></h4></div><p><b>Nome: Sei lá<br /><b>Cidade:</b> Brasília<br /><b>Local:</b> Carrera Kart</p>", "Meu Titulo");
+    </script>
+
+</body>
+
+</html>
