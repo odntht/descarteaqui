@@ -1,63 +1,77 @@
 <html>
   <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Marker Clustering</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>Descarte Aqui</title>
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 75%;
-        width: 30%;
-        margin: 0;
-        padding: 0;
+      #map{
+        height: 400px;
+        width: 100%;
       }
     </style>
-  </head>
+    </head>
   <body>
+    <h1>Google Maps</h1>
     <div id="map"></div>
     <script>
-
-      function initMap() {
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 3,
-          center: {lat: -15.989337, lng: -48.045350}
+    function initMap()
+      {
+      var options = { //Opçoes do Mapa
+        zoom:17, //Zoom que estará o mapa
+        center:{lat:-15.989368,lng:-48.045253} //Localização Inicial do Mapa
+      }  
+      var map = new google.maps.Map(document.getElementById('map'), options); //Google Maps por si só - Novo Mapa
+        
+                
+        //Array de marker
+        var markers = [
+          { //Funcao modelo para adicionar novos locais
+          coords:{lat:-15.989368,lng:-48.047263},
+          iconImage:'https://icon-icons.com/icons2/1239/PNG/32/heavymetal_83985.png', //Adicionar icone customizado
+          content:'<h1>Local de Coleta 1</h1>'
+        },
+          {
+          coords:{lat:-15.989768,lng:-48.045253},
+          content:'<h1>Local de Coleta 2</h1>',
+            iconImage:'https://icon-icons.com/icons2/641/PNG/32/plastic_icon-icons.com_59184.png'
+        },
+          {
+          coords:{lat:-15.989368,lng:-48.045253},
+          content:'<h1>Local de Coleta 3</h1>'
+        }
+          
+        ];
+        
+        //Loop pelos markers
+        for(var i = 0; i < markers.length;i++){
+          addMarker(markers[i]);
+        }
+        
+        //Funcao de Adicionar Marcadores
+        function addMarker (props){
+          var marker = new google.maps.Marker ({ //Lista de Locais Marcados - Marcadores
+          position:props.coords,
+          map:map,
+          //icon:props.iconImage
         });
-
-        // Create an array of alphabetical characters used to label the markers.
-        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        // Add some markers to the map.
-        // Note: The code uses the JavaScript Array.prototype.map() method to
-        // create an array of markers based on a given "locations" array.
-        // The map() method here has nothing to do with the Google Maps API.
-        var markers = locations.map(function(location, i) {
-          return new google.maps.Marker({
-            position: location,
-            label: labels[i % labels.length]
+          if(props.iconImage){ //Verificar se usará icone customizado
+             marker.setIcon(props.iconImage) //Definir imagem customizada
+             }
+          
+          //Adicionar informacoes
+          if(props.content)
+          var infoWindow = new google.maps.InfoWindow({ //Adiciona informações que exibirao ao clicar no icone do local
+          content:props.content
           });
+        
+        marker.addListener('click', function() {infoWindow.open(map,marker); //funcao que exibe as informacoes ao clicar no icone
         });
-
-        // Add a marker clusterer to manage the markers.
-        var markerCluster = new MarkerClusterer(map, markers,
-            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        }
       }
-      var locations = [
-        {lat: -15.989337, lng: -48.045350}, //Primeiro Ponto registrado
-        {lat: -15.989337, lng: -49.045350},
-        {lat: -15.989337, lng: -50.045350},
-        {lat: -15.989337, lng: -51.045350} //Ultimo ponto registrado
-      ]
-    </script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkaqI0fdS3vHK1pTgubI5UEob_vJ2GrQg&callback=initMap">
     </script>
-  </body>
-</html>
+
+    </body>
+  </html>
