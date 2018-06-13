@@ -1,7 +1,17 @@
-<!doctype html>
-<html lang="en">
-<style>
-* {
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Projeto Descarte-Aqui da UnB">
+  <meta name="author" content="">
+
+<title>Projeto Descarte Aqui</title>
+    <style>
+      #map{
+        height: 100%;
+        width: 100%;
+      }
+      * {
   box-sizing: border-box;
 }
 body {
@@ -53,22 +63,13 @@ input[type=submit] {
   background-color: DodgerBlue !important; 
   color: #ffffff; 
 }
-</style>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Projeto Descarte-Aqui da UnB">
-  <meta name="author" content="">
-
-  <title>Projeto Descarte Aqui</title>
-
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
   <script src="https://maps.googleapis.com/maps/api/js"></script>
-  <script src="mapa.js"></script>
-</head>
-
-<body>
+<script src="mapa.js"></script>
+    </head>
+  <body>
   <div class="container">
     <h1>Descarte Aqui</h1>
     <div class="d-flex flex-row">
@@ -187,57 +188,68 @@ var products = ["Aço","Ferro","Papel","Cartolina","Plástico","Papelão","Chumb
 /*initiate the autocomplete function on the "myInput" element, and pass along the products array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), products);
 </script>
-        <div class="p-4">
-        <h3>Localização no google Maps</h3>
-        <div id="mapa" style="height: 500px; width: 700px"></div>
-        <script>
-          google.maps.event.addDomListener(window, 'load', carrega_google_maps(-15.792872, -47.899374, 'mapa', 12, 'ROADMAP'));
-        </script>
-      </div>
-    </div>
+    <div class="p-6">
+	<h1>Google Maps</h1>
+    <div id="map"></div>
     <script>
-      function myFunction() {
-        var input, filter, table, tr, td, i;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          if (td) {
-            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
-            }
-          }
+    function initMap()
+      {
+      var options = { //Opçoes do Mapa
+        zoom:17, //Zoom que estará o mapa
+        center:{lat:-15.989368,lng:-48.045253} //Localização Inicial do Mapa
+      }  
+      var map = new google.maps.Map(document.getElementById('map'), options); //Google Maps por si só - Novo Mapa
+        
+                
+        //Array de marker
+        var markers = [
+          { //Funcao modelo para adicionar novos locais
+          coords:{lat:-15.989368,lng:-48.047263},
+          iconImage:'https://icon-icons.com/icons2/1239/PNG/32/heavymetal_83985.png', //Adicionar icone customizado
+          content:'<h1>Local de Coleta 1</h1>'
+        },
+          {
+          coords:{lat:-15.989768,lng:-48.045253},
+          content:'<h1>Local de Coleta 2</h1>',
+            iconImage:'https://icon-icons.com/icons2/641/PNG/32/plastic_icon-icons.com_59184.png'
+        },
+          {
+          coords:{lat:-15.989368,lng:-48.045253},
+          content:'<h1>Local de Coleta 3</h1>'
+        }
+          
+        ];
+        
+        //Loop pelos markers
+        for(var i = 0; i < markers.length;i++){
+          addMarker(markers[i]);
+        }
+        
+        //Funcao de Adicionar Marcadores
+        function addMarker (props){
+          var marker = new google.maps.Marker ({ //Lista de Locais Marcados - Marcadores
+          position:props.coords,
+          map:map,
+          //icon:props.iconImage
+        });
+          if(props.iconImage){ //Verificar se usará icone customizado
+             marker.setIcon(props.iconImage) //Definir imagem customizada
+             }
+          
+          //Adicionar informacoes
+          if(props.content)
+          var infoWindow = new google.maps.InfoWindow({ //Adiciona informações que exibirao ao clicar no icone do local
+          content:props.content
+          });
+        
+        marker.addListener('click', function() {infoWindow.open(map,marker); //funcao que exibe as informacoes ao clicar no icone
+        });
         }
       }
-
-       plotaInformation("001", "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF9900", -15.792872, -47.899374, "<div class='panel-heading panel-info'><h4><b>Informações de um Lugar</b></h4></div><p><b>Nome: Sei lá<br /><b>Cidade:</b> Brasília<br /><b>Local:</b> Carrera Kart</p>", "Meu Titulo");
-</script>
-    </div>
-    <script>
-      function myFunction() {
-        var input, filter, table, tr, td, i;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          if (td) {
-            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
-            }
-          }
-        }
-      }
-
-       plotaInformation("001", "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FF9900", -15.792872, -47.899374, "<div class='panel-heading panel-info'><h4><b>Informações de um Lugar</b></h4></div><p><b>Nome: Sei lá<br /><b>Cidade:</b> Brasília<br /><b>Local:</b> Carrera Kart</p>", "Meu Titulo");
     </script>
-</body>
-
-</html>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkaqI0fdS3vHK1pTgubI5UEob_vJ2GrQg&callback=initMap">
+    </script>
+</div>
+    </body>
+  </html>
